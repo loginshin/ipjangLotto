@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { getWeekId, generateWeeklyFortune, FortuneResult } from './utils/lotto';
-import { UserData } from './types';
+import { getWeekId, generateWeeklyFortune } from './utils/lotto';
+import { type FortuneResult } from './utils/lotto';
+import { type UserData } from './types';
 import LandingPage from './components/LandingPage';
 import ResultPage from './components/ResultPage';
 

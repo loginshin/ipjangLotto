@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserData } from '../types';
-import { FortuneResult } from '../utils/lotto';
+import { type UserData } from '../types';
+import { type FortuneResult } from '../utils/lotto';
 
 interface ResultPageProps {
   user: UserData;

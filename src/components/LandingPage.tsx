@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserData } from '../types';
+import { type UserData } from '../types';
 
 interface LandingPageProps {
   user: UserData;
