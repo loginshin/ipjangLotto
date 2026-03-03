@@ -113,6 +113,15 @@ function App() {
           />
         )
       )}
+
+      <footer className="app-footer">
+        <p className="footer-text">
+          서비스 이용 중 불편사항이나 기능 제안은 아래로 연락주세요.<br/>
+          <a href="mailto:loginshin3@gmail.com" className="footer-link">
+            ✉️ loginshin3@gmail.com
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }
