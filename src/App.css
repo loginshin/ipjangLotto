@@ -1,178 +1,244 @@
-.container {
-  max-width: 480px; /* 최대 너비 설정 */
+:root {
+  --primary-green: #2d5a27;
+  --light-green: #e8f5e9;
+  --accent-green: #81c784;
+  --text-main: #1b3022;
+  --bg-color: #f9fbf9;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+#root {
   width: 100%;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem;
-  text-align: center;
-  background-color: #ffffff; /* 카드형 컨테이너 */
-  border-radius: 20px; /* 둥근 모서리 */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* 최소화된 부드러운 그림자 */
-  border: 1px solid rgba(45, 90, 39, 0.1); /* 미세한 테두리 */
+  display: flex;
+  justify-content: center;
 }
 
-.title {
-  font-size: 2rem;
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  color: #2d5a27; /* 진한 보타니컬 초록 */
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(45, 90, 39, 0.08);
+  border: 1px solid rgba(129, 199, 132, 0.2);
+  margin-bottom: 20px;
+}
+
+/* Landing/Input Styles */
+.hero-title {
+  color: var(--primary-green);
+  font-size: 24px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
-.description {
-  color: #6a8d73; /* 보조 초록색 */
-  font-size: 0.95rem;
-  margin-bottom: 2.5rem;
-  line-height: 1.6;
-  word-break: keep-all;
+.privacy-notice {
+  font-size: 12px;
+  color: #88a08d;
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.5;
 }
 
 .input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 16px;
 }
 
-input {
-  padding: 1rem 1.25rem;
-  font-size: 1rem;
-  border: 1.5px solid #e0e7e1;
+.input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--primary-green);
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
   border-radius: 12px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  font-size: 16px;
+  background-color: white;
+}
+
+input:focus, select:focus {
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s;
-  background-color: #fcfdfc;
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 2px rgba(129, 199, 132, 0.2);
 }
 
-input:focus {
-  border-color: #4a7c44;
-  background-color: #ffffff;
-}
-
-button {
-  padding: 1.1rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2d5a27 0%, #4a7c44 100%); /* 진한 초록 그라데이션 */
+.cta-button {
+  width: 100%;
+  background: var(--primary-green);
   color: white;
   border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-  box-shadow: 0 4px 15px rgba(45, 90, 39, 0.2);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(45, 90, 39, 0.25);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-.ball-container {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 2.5rem 0;
-  flex-wrap: wrap;
-}
-
-.ball {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 800;
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-@keyframes popIn {
-  0% { transform: scale(0) rotate(-10deg); opacity: 0; }
-  100% { transform: scale(1) rotate(0); opacity: 1; }
-}
-
-/* Botanical Ball Colors - slightly more natural tones */
-.ball-1 { background: radial-gradient(circle at 30% 30%, #ffcc33, #e6b800); } /* 1-10: Golden Sand */
-.ball-2 { background: radial-gradient(circle at 30% 30%, #5ba4cf, #3d8ab5); } /* 11-20: Sky Blue */
-.ball-3 { background: radial-gradient(circle at 30% 30%, #e67e73, #d15d52); } /* 21-30: Terracotta */
-.ball-4 { background: radial-gradient(circle at 30% 30%, #a2b0af, #859493); } /* 31-40: Sage Grey */
-.ball-5 { background: radial-gradient(circle at 30% 30%, #82b366, #6c8ebf); } /* Special: Leaf Green (modified) */
-/* Wait, ball-5 should stay green but botanical */
-.ball-5 { background: radial-gradient(circle at 30% 30%, #7db364, #5a8a44); } /* 41-45: Forest Leaf */
-
-.history {
-  margin-top: 3.5rem;
-  text-align: left;
-  background-color: #f9fbf9;
-  padding: 1.5rem;
+  padding: 16px;
   border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
-.history h3 {
-  margin-top: 0;
-  font-size: 1rem;
-  color: #4a7c44;
-  margin-bottom: 1rem;
+.cta-button:active {
+  transform: scale(0.98);
+}
+
+.cta-button:hover {
+  background-color: #1e3d1a;
+}
+
+/* Result Styles */
+.score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--light-green);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eef3ee;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.history-item:last-child {
-  border-bottom: none;
-}
-
-.history-item span {
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.actions {
-  display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  margin: 0 auto 20px;
+  border: 6px solid var(--accent-green);
+  position: relative;
 }
 
-.share-btn {
-  background: #f0f7f4;
-  color: #2d5a27;
-  border: 1px solid #d1e2d7;
-  padding: 0.8rem 1.2rem;
-  font-size: 0.95rem;
-  box-shadow: none;
+.score-label {
+  font-size: 14px;
+  color: var(--primary-green);
+  font-weight: 600;
 }
 
-.share-btn:hover {
-  background: #e6f1ec;
-  color: #2d5a27;
-  box-shadow: none;
+.score-value {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--primary-green);
+  line-height: 1;
+  margin: 4px 0;
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 2rem 1.25rem;
-    border-radius: 0; /* 모바일 전면 레이아웃 또는 취향껏 */
-    min-height: 100vh;
-    box-shadow: none;
-    border: none;
-  }
+.score-percentile {
+  font-size: 12px;
+  color: #558b2f;
+  font-weight: 500;
 }
+
+.grid-fortune {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.fortune-item {
+  background: var(--bg-color);
+  padding: 14px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(129, 199, 132, 0.1);
+}
+
+.lotto-section {
+  border-top: 1px dashed #c8d6c9;
+  padding-top: 24px;
+  margin-top: 20px;
+}
+
+.lotto-title {
+  text-align: center;
+  font-weight: 800;
+  color: var(--primary-green);
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.lotto-set {
+  margin-bottom: 16px;
+}
+
+.lotto-number-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.lotto-ball {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fbc02d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #3e2723;
+  font-size: 15px;
+  box-shadow: 0 4px 0 #f9a825, inset -2px -2px 4px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.countdown-container {
+  background: #fff3e0;
+  padding: 15px;
+  border-radius: 16px;
+  margin-top: 24px;
+  text-align: center;
+  border: 1px solid #ffe0b2;
+}
+
+.countdown-label {
+  font-size: 12px;
+  color: #e65100;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.countdown-time {
+  font-size: 16px;
+  color: #ef6c00;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.reset-button {
+  margin-top: 24px;
+  background: none;
+  border: none;
+  color: #88a08d;
+  width: 100%;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.history-compare {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.history-up { color: #d32f2f; }
+.history-down { color: #1976d2; }

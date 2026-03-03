@@ -1,131 +1,117 @@
-import { useState, useEffect } from 'react';
-import { generateLottoNumbers } from './utils/lotto';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-
-interface HistoryItem {
-  id: number;
-  numbers: number[];
-  date: string;
-  seed: string;
-}
+import { getWeekId, generateWeeklyFortune, FortuneResult } from './utils/lotto';
+import { UserData } from './types';
+import LandingPage from './components/LandingPage';
+import ResultPage from './components/ResultPage';
 
 function App() {
-  const [name, setName] = useState('');
-  const [numbers, setNumbers] = useState<number[]>([]);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [view, setView] = useState<'landing' | 'result'>('landing');
+  const [user, setUser] = useState<UserData>({
+    nickname: '',
+    birth: '',
+    gender: 'male',
+    birthTime: '',
+  });
+  const [fortune, setFortune] = useState<FortuneResult | null>(null);
+  const [prevScore, setPrevScore] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState('');
 
-  // Load history from localStorage on mount
+  // 1. 초기 로드 시 기존 데이터 확인 및 자동 결과 표시
   useEffect(() => {
-    const saved = localStorage.getItem('lotto_history');
-    if (saved) {
-      setHistory(JSON.parse(saved));
+    const savedUser = localStorage.getItem('user_data');
+    const savedPrevScore = localStorage.getItem('prev_week_score');
+    
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+      
+      // 주차 정보 확인
+      const currentWeekId = getWeekId();
+      const lastWeekId = localStorage.getItem('last_week_id');
+      
+      // 주차가 바뀌었으면 이전 점수를 prevScore로 설정
+      if (lastWeekId && lastWeekId !== currentWeekId) {
+        setPrevScore(savedPrevScore ? Number(savedPrevScore) : null);
+      }
+      
+      const result = generateWeeklyFortune(parsedUser.birth + parsedUser.birthTime, parsedUser.gender, currentWeekId);
+      setFortune(result);
+      setView('result');
+      
+      // 현재 주차 정보 업데이트
+      localStorage.setItem('last_week_id', currentWeekId);
     }
   }, []);
 
-  const handleGenerate = () => {
-    if (!name.trim()) {
-      alert('이름이나 생년월일을 입력해주세요!');
-      return;
-    }
+  // 2. 다음 토요일 오전 6시 카운트다운 타이머
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      
+      // 다음 토요일 06시 계산
+      let target = new Date();
+      target.setDate(now.getDate() + (6 - now.getDay() + 7) % 7);
+      target.setHours(6, 0, 0, 0);
+      
+      // 이미 이번주 토요일 6시가 지났으면 다음주 토요일로
+      if (now.getTime() >= target.getTime()) {
+        target.setDate(target.getDate() + 7);
+      }
 
-    const today = new Date().toISOString().split('T')[0];
-    const seed = `${today}-${name}`;
-    const result = generateLottoNumbers(seed);
-
-    setIsAnimating(true);
-    setNumbers(result);
-
-    // Save to history
-    const newItem: HistoryItem = {
-      id: Date.now(),
-      numbers: result,
-      date: new Date().toLocaleString(),
-      seed: name,
+      const diff = target.getTime() - now.getTime();
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      
+      setCountdown(`${d}일 ${h}시간 ${m}분 ${s}초`);
     };
 
-    const newHistory = [newItem, ...history].slice(0, 5); // Keep last 5
-    setHistory(newHistory);
-    localStorage.setItem('lotto_history', JSON.stringify(newHistory));
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const handleShare = async () => {
-    if (numbers.length === 0) return;
-
-    const text = `[입장로또] 오늘의 행운 번호: ${numbers.join(', ')}\n당신의 행운을 확인해보세요!`;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('user_data', JSON.stringify(user));
     
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: '입장로또 행운 번호',
-          text: text,
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.log('Error sharing:', err);
-      }
-    } else {
-      // Fallback to clipboard
-      navigator.clipboard.writeText(text);
-      alert('번호가 클립보드에 복사되었습니다!');
-    }
+    const currentWeekId = getWeekId();
+    localStorage.setItem('last_week_id', currentWeekId);
+    
+    const result = generateWeeklyFortune(user.birth + user.birthTime, user.gender, currentWeekId);
+    setFortune(result);
+    localStorage.setItem('prev_week_score', result.totalScore.toString());
+    setView('result');
   };
 
-  const getBallClass = (n: number) => {
-    if (n <= 10) return 'ball-1';
-    if (n <= 20) return 'ball-2';
-    if (n <= 30) return 'ball-3';
-    if (n <= 40) return 'ball-4';
-    return 'ball-5';
+  const handleReset = () => {
+    if (window.confirm('입력된 정보를 초기화할까요?')) {
+      localStorage.removeItem('user_data');
+      localStorage.removeItem('last_week_id');
+      window.location.reload();
+    }
   };
 
   return (
-    <div className="container">
-      <h1 className="title">🍀 입장로또</h1>
-      <p className="description">오늘의 날짜와 당신의 정보로 생성된 세상에 하나뿐인 번호</p>
-
-      <div className="input-group">
-        <input
-          type="text"
-          placeholder="이름 또는 생년월일 (예: 홍길동880101)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+    <div className="app-container">
+      {view === 'landing' ? (
+        <LandingPage 
+          user={user} 
+          setUser={setUser} 
+          onSubmit={handleSubmit} 
         />
-        <button onClick={handleGenerate}>행운의 번호 뽑기</button>
-      </div>
-
-      {numbers.length > 0 && (
-        <div className="result-area">
-          <div className="ball-container">
-            {numbers.map((num, idx) => (
-              <div 
-                key={`${num}-${idx}`} 
-                className={`ball ${getBallClass(num)}`}
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                {num}
-              </div>
-            ))}
-          </div>
-          
-          <div className="actions">
-            <button className="share-btn" onClick={handleShare}>번호 공유하기</button>
-          </div>
-        </div>
-      )}
-
-      {history.length > 0 && (
-        <div className="history">
-          <h3>📜 최근 나의 행운 번호</h3>
-          {history.map((item) => (
-            <div key={item.id} className="history-item">
-              <span>{item.numbers.join(', ')}</span>
-              <small>{item.date.split(' ')[0]}</small>
-            </div>
-          ))}
-        </div>
+      ) : (
+        fortune && (
+          <ResultPage 
+            user={user} 
+            fortune={fortune} 
+            prevScore={prevScore} 
+            countdown={countdown} 
+            onReset={handleReset} 
+          />
+        )
       )}
     </div>
   );
