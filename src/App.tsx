@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { getWeekId, generateWeeklyFortune } from './utils/lotto';
+import { validateUserData } from './utils/validation';
+import { storage } from './utils/storage';
 import { type FortuneResult } from './utils/lotto';
 import { type UserData } from './types';
 import LandingPage from './components/LandingPage';
@@ -18,55 +20,51 @@ function App() {
   const [prevScore, setPrevScore] = useState<number | null>(null);
   const [countdown, setCountdown] = useState('');
 
-  // 1. 초기 로드 시 데이터 로드 및 해시 감지
-  useEffect(() => {
-    const savedUser = localStorage.getItem('user_data');
-    const savedPrevScore = localStorage.getItem('prev_week_score');
+  const loadData = useCallback(() => {
+    const savedUser = storage.getUserData();
+    const savedPrevScore = storage.getPrevWeekScore();
     
     if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
-      setUser(parsedUser);
+      setUser(savedUser);
       
       const currentWeekId = getWeekId();
-      const lastWeekId = localStorage.getItem('last_week_id');
+      const lastWeekId = storage.getLastWeekId();
       
       if (lastWeekId && lastWeekId !== currentWeekId) {
-        setPrevScore(savedPrevScore ? Number(savedPrevScore) : null);
+        setPrevScore(savedPrevScore);
       }
       
-      const result = generateWeeklyFortune(parsedUser.birth + parsedUser.birthTime, parsedUser.gender, currentWeekId);
+      const result = generateWeeklyFortune(savedUser.birth + savedUser.birthTime, savedUser.gender, currentWeekId);
       setFortune(result);
-      // 여기서 setView('result')를 자동으로 하지 않아 첫 로딩은 항상 landing이 됩니다.
     }
+  }, []);
+
+  useEffect(() => {
+    loadData();
 
     const handleHashChange = () => {
-      if (window.location.hash === '#result') {
-        // 결과 데이터가 있는 경우에만 결과 뷰로 이동
-        if (localStorage.getItem('user_data')) {
-          setView('result');
-        } else {
-          window.location.hash = '';
-          setView('landing');
-        }
+      const isResultHash = window.location.hash === '#result';
+      const hasUserData = !!storage.getUserData();
+
+      if (isResultHash && hasUserData) {
+        setView('result');
       } else {
+        if (isResultHash) window.location.hash = '';
         setView('landing');
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    // 초기 로드 시 해시가 있으면 대응
-    if (window.location.hash === '#result' && localStorage.getItem('user_data')) {
+    if (window.location.hash === '#result' && storage.getUserData()) {
       setView('result');
     }
 
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [loadData]);
 
-  // 2. 다음 토요일 오전 6시 카운트다운 타이머
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      
       let target = new Date();
       target.setDate(now.getDate() + (6 - now.getDay() + 7) % 7);
       target.setHours(6, 0, 0, 0);
@@ -91,23 +89,29 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem('user_data', JSON.stringify(user));
+    
+    const { isValid, errors } = validateUserData(user);
+    if (!isValid) {
+      alert(errors.join('\n'));
+      return;
+    }
+
+    storage.setUserData(user);
     
     const currentWeekId = getWeekId();
-    localStorage.setItem('last_week_id', currentWeekId);
+    storage.setLastWeekId(currentWeekId);
     
     const result = generateWeeklyFortune(user.birth + user.birthTime, user.gender, currentWeekId);
     setFortune(result);
-    localStorage.setItem('prev_week_score', result.totalScore.toString());
+    storage.setPrevWeekScore(result.totalScore);
     
     setView('result');
-    window.location.hash = 'result'; // 해시 업데이트하여 결과 페이지임을 표시
+    window.location.hash = 'result';
   };
 
   const handleReset = () => {
     if (window.confirm('입력된 정보를 초기화할까요?')) {
-      localStorage.removeItem('user_data');
-      localStorage.removeItem('last_week_id');
+      storage.clear();
       window.location.hash = '';
       window.location.reload();
     }
