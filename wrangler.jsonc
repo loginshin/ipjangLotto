@@ -2,8 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sajulotto",
   "compatibility_date": "2025-09-27",
+  "main": "src/main.tsx",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application"
+  },
+  "observability": {
+    "enabled": true
   }
 }
