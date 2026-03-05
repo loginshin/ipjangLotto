@@ -59,6 +59,11 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
         </div>
       </div>
 
+      {/* 💰 AdSense Placeholder: Result Middle */}
+      <div className="adsense-container" style={{ marginBottom: '25px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
+        ADVERTISEMENT
+      </div>
+
       {/* 🌟 사주로 풀이한 5대 행운수 */}
       <div style={{ 
         backgroundColor: '#fff', padding: '15px', borderRadius: '12px', marginBottom: '25px',
@@ -147,6 +152,11 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
       <div className="countdown-container">
         <div className="countdown-label">{t('result.countdown_label')}</div>
         <div className="countdown-time">{countdown}</div>
+      </div>
+
+      {/* 💰 AdSense Placeholder: Result Bottom */}
+      <div className="adsense-container" style={{ marginBottom: '25px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
+        ADVERTISEMENT
       </div>
       
       <button className="reset-button" onClick={onReset}>

@@ -1,6 +1,10 @@
 {
   "common": {
-    "loading": "분석 중...",
+    "loading": "사주 DNA 분석 중...",
+    "loading_sub1": "하늘의 기운(천간)을 읽고 있습니다.",
+    "loading_sub2": "땅의 기운(지지)을 분석 중입니다.",
+    "loading_sub3": "오행의 조화를 계산하고 있습니다.",
+    "loading_ad_notice": "잠시만 기다려 주세요. 분석이 거의 완료되었습니다.",
     "error": "오류가 발생했습니다.",
     "nickname": "닉네임 (선택)",
     "nickname_placeholder": "닉네임을 입력하세요",

@@ -111,6 +111,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ user, setUser, onSubmit }) =>
           {t('landing.quote')}
         </div>
       </div>
+
+      {/* 💰 AdSense Placeholder: Landing Bottom */}
+      <div className="adsense-container" style={{ marginTop: '30px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
+        ADVERTISEMENT
+        {/* <ins className="adsbygoogle" ... /> */}
+      </div>
     </div>
   );
 };

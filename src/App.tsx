@@ -7,9 +7,13 @@ import { type FortuneResult } from './utils/lotto';
 import { type UserData } from './types';
 import LandingPage from './components/LandingPage';
 import ResultPage from './components/ResultPage';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t } = useTranslation();
   const [view, setView] = useState<'landing' | 'result'>('landing');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState('');
   const [user, setUser] = useState<UserData>({
     nickname: '',
     birth: '',
@@ -96,17 +100,33 @@ function App() {
       return;
     }
 
-    storage.setUserData(user);
-    
-    const currentWeekId = getWeekId();
-    storage.setLastWeekId(currentWeekId);
-    
-    const result = generateWeeklyFortune(user.birth, user.gender, currentWeekId, user.birthTime);
-    setFortune(result);
-    storage.setPrevWeekScore(result.totalScore);
-    
-    setView('result');
-    window.location.hash = 'result';
+    setIsLoading(true);
+    const messages = [t('common.loading_sub1'), t('common.loading_sub2'), t('common.loading_sub3')];
+    let msgIdx = 0;
+    setLoadingMsg(messages[0]);
+
+    const msgTimer = setInterval(() => {
+      msgIdx++;
+      if (msgIdx < messages.length) {
+        setLoadingMsg(messages[msgIdx]);
+      }
+    }, 1100);
+
+    setTimeout(() => {
+      clearInterval(msgTimer);
+      storage.setUserData(user);
+      
+      const currentWeekId = getWeekId();
+      storage.setLastWeekId(currentWeekId);
+      
+      const result = generateWeeklyFortune(user.birth, user.gender, currentWeekId, user.birthTime);
+      setFortune(result);
+      storage.setPrevWeekScore(result.totalScore);
+      
+      setIsLoading(false);
+      setView('result');
+      window.location.hash = 'result';
+    }, 3800);
   };
 
   const handleReset = () => {
@@ -119,6 +139,32 @@ function App() {
 
   return (
     <div className="app-container">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="loader"></div>
+            <h2 className="loading-title">{t('common.loading')}</h2>
+            <p className="loading-sub">{loadingMsg}</p>
+            
+            {/* 💰 AdSense Interstitial Placeholder */}
+            <div className="adsense-interstitial" style={{ 
+              marginTop: '40px', width: '100%', minHeight: '300px', 
+              backgroundColor: '#fff', borderRadius: '15px', display: 'flex', 
+              flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
+              color: '#999', fontSize: '12px', border: '1px solid #eee',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+              padding: '20px', boxSizing: 'border-box'
+            }}>
+              <span style={{marginBottom: '10px', fontSize: '10px', opacity: 0.5}}>ADVERTISEMENT</span>
+              <div style={{width: '100%', flex: 1, backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px dashed #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                 AD GOES HERE
+              </div>
+              <p style={{marginTop: '15px', fontSize: '11px', color: '#666', fontWeight: 500}}>{t('common.loading_ad_notice')}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {view === 'landing' ? (
         <LandingPage 
           user={user} 
