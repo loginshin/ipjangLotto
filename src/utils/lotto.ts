@@ -89,18 +89,14 @@ export const generateWeeklyFortune = (
   ];
   const luckyColor = colors[Math.floor(rand() * colors.length)];
 
-  // 4. 로또 세트 수 결정 (재물운 기반)
-  const setCount = wealth >= 90 ? 5 : (wealth >= 70 ? 3 : 1);
+  // 4. 로또 세트 수 결정 (사용자 요청에 따라 한 세트만 추천)
   const lottoSets: number[][] = [];
-  
-  for (let i = 0; i < setCount; i++) {
-    const set: number[] = [];
-    while (set.length < 6) {
-      const n = Math.floor(rand() * 45) + 1;
-      if (!set.includes(n)) set.push(n);
-    }
-    lottoSets.push(set.sort((a, b) => a - b));
+  const set: number[] = [];
+  while (set.length < 6) {
+    const n = Math.floor(rand() * 45) + 1;
+    if (!set.includes(n)) set.push(n);
   }
+  lottoSets.push(set.sort((a, b) => a - b));
 
   // 5. 오늘의 미세 변동 (+/- 5%) - 주간 시드 + 오늘 날짜 조합
   const todayStr = new Date().toISOString().split('T')[0];
