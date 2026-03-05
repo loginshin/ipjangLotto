@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { calculateSaju, SajuResult } from '../utils/saju';
+import { calculateSaju, type SajuResult } from '../utils/saju';
 
 const SajuCalculator: React.FC = () => {
   const [formData, setFormData] = useState({

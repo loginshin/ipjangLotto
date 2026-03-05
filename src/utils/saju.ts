@@ -1,4 +1,4 @@
-import { Solar, Lunar } from 'lunar-typescript';
+import { Solar } from 'lunar-typescript';
 
 /**
  * Five Elements mapping for Heavenly Stems and Earthly Branches.
@@ -62,7 +62,7 @@ export const getElementColor = (char: string): string => {
 export const calculateSaju = (
   date: string,
   time: string,
-  gender: 'male' | 'female'
+  _gender: 'male' | 'female'
 ): SajuResult => {
   const [year, month, day] = date.split('-').map(Number);
   const [hour, minute] = time.split(':').map(Number);
