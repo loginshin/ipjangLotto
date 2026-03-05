@@ -34,7 +34,7 @@ function App() {
         setPrevScore(savedPrevScore);
       }
       
-      const result = generateWeeklyFortune(savedUser.birth + savedUser.birthTime, savedUser.gender, currentWeekId);
+      const result = generateWeeklyFortune(savedUser.birth, savedUser.gender, currentWeekId, savedUser.birthTime);
       setFortune(result);
     }
   }, []);
@@ -101,7 +101,7 @@ function App() {
     const currentWeekId = getWeekId();
     storage.setLastWeekId(currentWeekId);
     
-    const result = generateWeeklyFortune(user.birth + user.birthTime, user.gender, currentWeekId);
+    const result = generateWeeklyFortune(user.birth, user.gender, currentWeekId, user.birthTime);
     setFortune(result);
     storage.setPrevWeekScore(result.totalScore);
     

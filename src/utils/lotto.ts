@@ -1,6 +1,9 @@
+import { calculateSaju, getLuckyNumbersWithMeaning } from './saju';
+
 /**
  * Simple hash function to convert string seed to a number
  */
+// ... (existing cyrb128 and mulberry32 code)
 const cyrb128 = (str: string) => {
   let h1 = 1779033703, h2 = 3144134277,
       h3 = 1013904242, h4 = 2773480762;
@@ -65,23 +68,28 @@ export interface FortuneResult {
 export const generateWeeklyFortune = (
   birth: string, 
   gender: string, 
-  weekId: string
+  weekId: string,
+  birthTime: string // 태어난 시간 추가
 ): FortuneResult => {
   const seedStr = `${birth}-${gender}-${weekId}`;
   const seed = cyrb128(seedStr)[0];
   const rand = mulberry32(seed);
 
-  // 1. 세부 운세 점수 생성 (0~100)
+  // 1. 사주 기반 '평생 행운수' 5개 추출
+  const saju = calculateSaju(birth, birthTime, gender as 'male' | 'female');
+  const staticNumbers = getLuckyNumbersWithMeaning(saju).map(n => n.number);
+
+  // 2. 세부 운세 점수 생성
   const wealth = Math.floor(rand() * 101);
   const love = Math.floor(rand() * 101);
   const work = Math.floor(rand() * 101);
   const health = Math.floor(rand() * 101);
   const totalScore = Math.floor((wealth + love + work + health) / 4);
 
-  // 2. 전국 상위 % 계산 (점수가 높을수록 낮은 % = 상위권)
+  // 3. 전국 상위 % 계산
   const percentile = Math.max(1, 100 - Math.floor(totalScore * 0.95 + rand() * 5));
 
-  // 3. 행운의 색상 추출
+  // 4. 행운의 색상 추출
   const colors = [
     '#FF5733', '#33FF57', '#3357FF', '#F333FF', 
     '#FFFD33', '#33FFF3', '#000000', '#FFFFFF',
@@ -89,9 +97,10 @@ export const generateWeeklyFortune = (
   ];
   const luckyColor = colors[Math.floor(rand() * colors.length)];
 
-  // 4. 로또 세트 수 결정 (사용자 요청에 따라 한 세트만 추천)
+  // 5. 로또 번호 조합 (사주 행운수 5개 + 이번 주 행운수 1개)
   const lottoSets: number[][] = [];
-  const set: number[] = [];
+  const set = [...new Set(staticNumbers)]; // 사주 기반 고유 번호들
+  
   while (set.length < 6) {
     const n = Math.floor(rand() * 45) + 1;
     if (!set.includes(n)) set.push(n);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { type UserData } from '../types';
 import { type FortuneResult } from '../utils/lotto';
-import { calculateSaju, getElementColor } from '../utils/saju';
+import { calculateSaju, getElementColor, getLuckyNumbersWithMeaning } from '../utils/saju';
 
 interface ResultPageProps {
   user: UserData;
@@ -13,6 +13,7 @@ interface ResultPageProps {
 
 const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, countdown, onReset }) => {
   const saju = calculateSaju(user.birth, user.birthTime, user.gender as 'male' | 'female');
+  const specialNumbers = getLuckyNumbersWithMeaning(saju);
 
   const PillarBox = ({ title, stem, branch }: { title: string, stem: string, branch: string }) => (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
@@ -53,6 +54,41 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
           <PillarBox title="일(日)" stem={saju.heavenlyStems[2]} branch={saju.earthlyBranches[2]} />
           <PillarBox title="월(月)" stem={saju.heavenlyStems[1]} branch={saju.earthlyBranches[1]} />
           <PillarBox title="년(年)" stem={saju.heavenlyStems[0]} branch={saju.earthlyBranches[0]} />
+        </div>
+      </div>
+
+      {/* 🌟 사주로 풀이한 5대 행운수 */}
+      <div style={{ 
+        backgroundColor: '#fff', padding: '15px', borderRadius: '12px', marginBottom: '25px',
+        border: '1px solid #e0f2f1', boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+      }}>
+        <div style={{ textAlign: 'center', fontSize: '14px', color: '#00796b', marginBottom: '15px', fontWeight: 700 }}>
+          🔮 사주 오행 기반 5대 행운수
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {specialNumbers.map((item) => (
+            <div key={item.type} style={{ 
+              display: 'flex', alignItems: 'center', backgroundColor: '#fdfdfd', 
+              padding: '8px 12px', borderRadius: '8px', border: '1px solid #f0f0f0'
+            }}>
+              <div style={{ 
+                width: '6px', height: '24px', 
+                backgroundColor: getElementColor(item.type === 'wood' ? '甲' : item.type === 'fire' ? '丙' : item.type === 'earth' ? '戊' : item.type === 'metal' ? '庚' : '壬'),
+                borderRadius: '3px', marginRight: '10px'
+              }}></div>
+              <div style={{ flex: 1 }}>
+                <span style={{ fontWeight: 700, fontSize: '13px', color: '#444', marginRight: '5px' }}>{item.label}</span>
+                <span style={{ fontSize: '11px', color: '#999' }}>{item.desc}</span>
+              </div>
+              <div style={{ 
+                width: '28px', height: '28px', backgroundColor: '#455a64', color: '#fff', 
+                borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 700, fontSize: '14px'
+              }}>
+                {item.number}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       

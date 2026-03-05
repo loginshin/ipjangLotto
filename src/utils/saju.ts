@@ -110,3 +110,28 @@ export const calculateSaju = (
     fiveElements
   };
 };
+
+/**
+ * 사주 오행 기반 5대 행운의 숫자와 의미 추출
+ */
+export const getLuckyNumbersWithMeaning = (saju: SajuResult) => {
+  const meanings = [
+    { type: 'wood', label: '성취(木)', desc: '새로운 시작과 성장을 돕는 기운', base: [3, 8, 13, 18, 23, 28, 33, 38, 43] },
+    { type: 'fire', label: '인기(火)', desc: '나를 빛나게 하고 에너지를 주는 기운', base: [2, 7, 12, 17, 22, 27, 32, 37, 42] },
+    { type: 'earth', label: '안정(土)', desc: '기반을 튼튼히 하고 중심을 잡는 기운', base: [5, 10, 15, 20, 25, 30, 35, 40, 45] },
+    { type: 'metal', label: '재물(金)', desc: '결실을 맺고 실속을 챙기는 명예의 기운', base: [4, 9, 14, 19, 24, 29, 34, 39, 44] },
+    { type: 'water', label: '지혜(水)', desc: '위기를 극복하고 흐름을 타는 지혜의 기운', base: [1, 6, 11, 16, 21, 26, 31, 36, 41] },
+  ];
+
+  const seed = saju.heavenlyStems.join('') + saju.earthlyBranches.join('');
+  
+  return meanings.map((m, idx) => {
+    const charCodeSum = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const selectedNumber = m.base[(charCodeSum + idx) % m.base.length];
+    
+    return {
+      ...m,
+      number: selectedNumber
+    };
+  });
+};
