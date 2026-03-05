@@ -22,7 +22,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ user, setUser, onSubmit }) =>
         <button onClick={() => changeLanguage('en')} style={{ fontSize: '10px', padding: '2px 6px', opacity: i18n.language.startsWith('en') ? 1 : 0.5 }}>EN</button>
       </div>
 
-      <div className="hero-title">{t('landing.title')}</div>
+      <h1 className="hero-title">{t('landing.title')}</h1>
       <p className="privacy-notice">
         {t('landing.subtitle')}<br/>
         <span style={{fontSize: '10px', opacity: 0.8}}>{t('landing.privacy')}</span>
