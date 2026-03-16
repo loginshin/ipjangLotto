@@ -23,6 +23,8 @@
     "rule_5plus1_desc": "We combine 5 lifelong numbers from your Five Elements (Wood, Fire, Earth, Metal, Water) with 1 variable number for this week.",
     "report_title": "Personalized Weekly Report",
     "report_desc": "Beyond just numbers, we calculate your wealth, love, and health scores to guide your week.",
+    "trust_logic_title": "Proven Saju Algorithm",
+    "trust_logic_desc": "Not a random generator. We strictly implement traditional 'Day Master-Wealth Star' logic to calculate your innate fortune and financial flow.",
     "quote": "\"Saju is your roots; fortune is the wind you meet. We calculate the perfect meeting point of both.\""
   },
   "result": {
@@ -48,6 +50,11 @@
     "work": "Career",
     "health": "Health",
     "lucky_color": "Your Lucky Color:",
+    "money_advice_title": "💰 Financial Insight from Saju",
+    "money_advice_none": "The energy of wealth isn't directly visible, but your diligence (output) is your greatest asset. Consistency is your key to success.",
+    "money_advice_many": "There's much wealth around you, but it may be overwhelming. Focus on management over greed, and consider collaboration.",
+    "money_advice_strong": "You possess strong energy to seize wealth. Decisive action when opportunities arise will likely lead to great prosperity.",
+    "money_advice_default": "Your wealth and personal energy are well-balanced. It's an excellent time to steadily build your assets.",
     "lotto_recommend_title": "💎 Recommended Numbers",
     "lotto_recommend_desc": "A single set of numbers extracted based on your Saju and this week's luck.",
     "countdown_label": "Next update in"

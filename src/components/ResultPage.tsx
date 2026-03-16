@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { type UserData } from '../types';
 import { type FortuneResult } from '../utils/lotto';
-import { calculateSaju, getElementColor, getLuckyNumbersWithMeaning } from '../utils/saju';
+import { calculateSaju, getElementColor, getLuckyNumbersWithMeaning, getMoneyFortuneMessage } from '../utils/saju';
 
 interface ResultPageProps {
   user: UserData;
@@ -16,6 +16,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
   const { t } = useTranslation();
   const saju = calculateSaju(user.birth, user.birthTime, user.gender as 'male' | 'female');
   const specialNumbers = getLuckyNumbersWithMeaning(saju);
+  const moneyAdvice = getMoneyFortuneMessage(saju, t);
 
   const PillarBox = ({ title, stem, branch }: { title: string, stem: string, branch: string }) => (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
@@ -62,6 +63,20 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
           <PillarBox title="月" stem={saju.heavenlyStems[1]} branch={saju.earthlyBranches[1]} />
           <PillarBox title="年" stem={saju.heavenlyStems[0]} branch={saju.earthlyBranches[0]} />
         </div>
+      </div>
+
+      {/* 💰 금전운 분석 섹션 */}
+      <div style={{ 
+        backgroundColor: '#fffbe6', padding: '18px', borderRadius: '12px', marginBottom: '25px',
+        border: '1px solid #ffe58f', position: 'relative', overflow: 'hidden'
+      }}>
+        <div style={{ fontSize: '14px', color: '#856404', fontWeight: 800, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+          {t('result.money_advice_title')}
+        </div>
+        <p style={{ fontSize: '13px', color: '#533f03', lineHeight: '1.6', margin: 0, fontWeight: 500 }}>
+          {moneyAdvice}
+        </p>
+        <div style={{ position: 'absolute', right: '-10px', bottom: '-10px', fontSize: '40px', opacity: 0.1, transform: 'rotate(-15deg)' }}>💰</div>
       </div>
 
       {/* 🌟 사주로 풀이한 5대 행운수 */}

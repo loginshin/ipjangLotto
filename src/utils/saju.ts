@@ -129,9 +129,43 @@ export const getLuckyNumbersWithMeaning = (saju: SajuResult) => {
     const charCodeSum = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const selectedNumber = m.base[(charCodeSum + idx) % m.base.length];
     
-    return {
-      ...m,
-      number: selectedNumber
-    };
-  });
+  return {
+    ...m,
+    number: selectedNumber
+  };
+});
+};
+
+/**
+ * 사용자의 사주 구성에 따른 금전운 맞춤 조언 생성
+ * 일간(Day Master)과 재성(Wealth Star)의 관계를 분석합니다.
+ */
+export const getMoneyFortuneMessage = (saju: SajuResult, t: any): string => {
+  const dayMaster = saju.heavenlyStems[2]; // 일간 (나 자신)
+  const myElement = ELEMENT_MAP[dayMaster];
+  
+  // 재성(Wealth) 오행 찾기 (내가 극하는 것)
+  const wealthMap: Record<string, keyof FiveElementsCount> = {
+    wood: "earth",
+    fire: "metal",
+    earth: "water",
+    metal: "wood",
+    water: "fire"
+  };
+  
+  const wealthElement = wealthMap[myElement];
+  const wealthCount = saju.fiveElements[wealthElement];
+  const myCount = saju.fiveElements[myElement as keyof FiveElementsCount];
+
+  // 1. 재성이 없는 경우 (무재사주)
+  if (wealthCount === 0) return t('result.money_advice_none');
+  
+  // 2. 재성이 너무 많은 경우 (재다신약 가능성)
+  if (wealthCount >= 3) return t('result.money_advice_many');
+  
+  // 3. 비겁이 강한 경우 (재물을 취할 힘이 있음)
+  if (myCount >= 3) return t('result.money_advice_strong');
+  
+  // 4. 기본 조언
+  return t('result.money_advice_default');
 };

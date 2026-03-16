@@ -101,6 +101,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ user, setUser, onSubmit }) =>
               </p>
             </div>
           </div>
+
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '22px', backgroundColor: '#f3e5f5', padding: '10px', borderRadius: '12px' }}>⚖️</div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '14px', marginBottom: '4px', color: '#333' }}>{t('landing.trust_logic_title')}</div>
+              <p style={{ fontSize: '12px', color: '#777', lineHeight: '1.6', margin: 0 }}>
+                {t('landing.trust_logic_desc')}
+              </p>
+            </div>
+          </div>
         </div>
 
         <div style={{ 
