@@ -17,9 +17,19 @@ const LandingPage: React.FC<LandingPageProps> = ({ user, setUser, onSubmit }) =>
 
   return (
     <div className="card">
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '5px', marginBottom: '10px' }}>
-        <button onClick={() => changeLanguage('ko')} style={{ fontSize: '10px', padding: '2px 6px', opacity: i18n.language === 'ko' ? 1 : 0.5 }}>KO</button>
-        <button onClick={() => changeLanguage('en')} style={{ fontSize: '10px', padding: '2px 6px', opacity: i18n.language.startsWith('en') ? 1 : 0.5 }}>EN</button>
+      <div className="lang-switcher">
+        <button 
+          onClick={() => changeLanguage('ko')} 
+          className={`lang-btn ${i18n.language === 'ko' ? 'active' : ''}`}
+        >
+          한국어
+        </button>
+        <button 
+          onClick={() => changeLanguage('en')} 
+          className={`lang-btn ${i18n.language.startsWith('en') ? 'active' : ''}`}
+        >
+          English
+        </button>
       </div>
 
       <h1 className="hero-title">{t('landing.title')}</h1>
