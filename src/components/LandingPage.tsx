@@ -112,8 +112,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ user, setUser, onSubmit }) =>
         </div>
       </div>
 
-      {/* 💰 AdSense Placeholder: Landing Bottom */}
-      <div className="adsense-container" style={{ marginTop: '30px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
+      {/* 💰 AdSense Placement: Landing Bottom */}
+      <div className="adsense-container bottom">
         ADVERTISEMENT
         {/* <ins className="adsbygoogle" ... /> */}
       </div>

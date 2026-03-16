@@ -39,6 +39,11 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
 
   return (
     <div className="card">
+      {/* 💰 AdSense Placement: Top (High Visibility) */}
+      <div className="adsense-container top">
+        ADVERTISEMENT
+      </div>
+
       <div style={{textAlign: 'center', color: 'var(--primary-green)', fontWeight: 800, marginBottom: '24px', fontSize: '18px'}}>
         ✨ {t('result.report_title', { name: user.nickname || 'Guest' })}
       </div>
@@ -57,11 +62,6 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
           <PillarBox title="月" stem={saju.heavenlyStems[1]} branch={saju.earthlyBranches[1]} />
           <PillarBox title="年" stem={saju.heavenlyStems[0]} branch={saju.earthlyBranches[0]} />
         </div>
-      </div>
-
-      {/* 💰 AdSense Placeholder: Result Middle */}
-      <div className="adsense-container" style={{ marginBottom: '25px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
-        ADVERTISEMENT
       </div>
 
       {/* 🌟 사주로 풀이한 5대 행운수 */}
@@ -154,8 +154,8 @@ const ResultPage: React.FC<ResultPageProps> = ({ user, fortune, prevScore, count
         <div className="countdown-time">{countdown}</div>
       </div>
 
-      {/* 💰 AdSense Placeholder: Result Bottom */}
-      <div className="adsense-container" style={{ marginBottom: '25px', minHeight: '100px', backgroundColor: '#fafafa', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', fontSize: '10px', border: '1px dashed #eee' }}>
+      {/* 💰 AdSense Placement: Bottom (Final Engagement) */}
+      <div className="adsense-container bottom">
         ADVERTISEMENT
       </div>
       

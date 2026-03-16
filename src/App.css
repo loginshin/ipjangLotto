@@ -243,6 +243,36 @@ input:focus, select:focus {
 .history-up { color: #d32f2f; }
 .history-down { color: #1976d2; }
 
+/* AdSense Styles */
+.adsense-container {
+  margin: 25px 0;
+  min-height: 100px;
+  background-color: #fafafa;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  font-size: 11px;
+  border: 1px dashed #eee;
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.adsense-container:hover {
+  background-color: #f5f5f5;
+}
+
+.adsense-container.top {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.adsense-container.bottom {
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
+
 /* Footer Styles */
 .app-footer {
   margin-top: 20px;
